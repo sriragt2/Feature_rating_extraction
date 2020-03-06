@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Create SSO</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="../static/jquery.bootstrap.wizard.js"></script>
+      <link href="../static/app.css" rel="stylesheet" />
+      <meta charset="utf-8" />
+   </head>
+   <body>
+      <div class="container page_header">
+         <div class="row ">
+            
+            <div class="col-sm-12">
+               <label class="page_header_text">Analysing sentiment of features with user reviews</label>
+            </div>
+         </div>
+         <br />
+         <br />
+         <div class="panel panel-default">
+            <div class="panel-content">
+               <div id="rootwizard" class="tabbable tabs-left">
+                  <ul>
+                     <li><a href="#tab1" data-toggle="tab">Test Data Preparation</a></li>
+                     <li><a href="#tab2" data-toggle="tab">Model Execution and Evaluation Results</a></li>
+                     <li><a href="#tab3" data-toggle="tab">Sentiment of a Feature</a></li>
+                     <li><a href="#tab4" data-toggle="tab">Sentiment Analyzer Demo</a></li>
+                  </ul>
+                  <div class="tab-content">
+                     <div class="tab-pane" id="tab1">
+                        <div class="col-sm-4 " style="border-right: 0.5px solid #9b9b9b">
+                           <div style="align-items: center;display: flex;justify-content: center;" class="panel-heading">
+                              <label for="ReqContact"> Data Extraction </label>
+                           </div>
+                           <div class="radio">
+                              <label><input type="radio" name="optradio" checked>Ebay Product Reviews</label>
+                              <div class="input-group" style="padding-left:20px">
+                                 <input id="scrapURL" class="form-control">
+                                 <span class="input-group-btn">
+                                 <button id="scrap" class="btn btn-info">Scrap</button>
+                                 </span>
+                              </div>
+                              <label id="scrappedLabel"></label>
+                           </div>
+                           <div class="radio">
+                              <label><input type="radio" name="optradio">Use the existing data (3000 available)</label>
+                              <div class="input-group" style="padding-left:20px">
+                                 <span class="input-group-addon">Number of reviews for testing </span>
+                                 <input id="reviewsToPick" class="form-control">
+                                 <span class="input-group-btn">
+                                 <button id="pick" class="btn btn-info">Pick</button>
+                                 </span>
+                              </div>
+                              <label id="pickedReviews"></label>
+                           </div>
+                        </div>
+                        <div class="col-sm-8">
+                           <div style="align-items: center;display: flex;justify-content: center;" class="panel-heading">
+                              <label for="ReqContact"> Imported data </label>
+                           </div>
+                           <div style="height:350px;overflow-y:scroll">
+                              <table id="testDataTable" class="table table-condensed">
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="tab-pane" id="tab2">
+                        <div class="col-sm-6" style="border-right: 0.5px solid #9b9b9b">
+                           <div style="align-items: center;display: flex;padding-left:100px;" class="panel-heading">
+                              <label for="ReqContact"> Support Vector Machine </label>
+                              <span class="input-group-btn" style="padding-left:20px">
+                              <button id="runSVM" class="btn btn-info">Run SVM</button>
+                              </span>
+                           </div>
+                           <hr />
+                           <div style="align-items: center;display: flex;justify-content: center;" class="panel-heading">
+                              <label for="ReqContact"> Model Results </label>
+                           </div>
+                           <div style="overflow-y:scroll">
+                              <table id="svmResultDataTable" class="table table-condensed">
+                              </table>
+                           </div>
+                        </div>
+                        <div class="col-sm-6" style="border-right: 0.5px solid #9b9b9b">
+                           <div style="align-items: center;display: flex;padding-left:150px" class="panel-heading">
+                              <label for="ReqContact"> Naive Bayes </label>
+                              <span class="input-group-btn" style="padding-left:20px">
+                              <button id="runNB" class="btn btn-info">Run Naive Bayes</button>
+                              </span>
+                           </div>
+                           <hr />
+                           <div style="align-items: center;display: flex;justify-content: center;" class="panel-heading">
+                              <label for="ReqContact"> Model Results </label>
+                           </div>
+                           <div style="overflow-y:scroll">
+                              <table id="nbResultDataTable" class="table table-condensed">
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="tab-pane" id="tab3">
+                        <div class="input-group col-sm-8" style="padding-left:20px; padding-top:20px">
+                           <span class="input-group-addon">Enter a feature </span>
+                           <input id="feature" class="form-control">
+                           <span class="input-group-btn">
+                           <button id="featureScore" class="btn btn-info">Get Score</button>
+                           </span>
+                        </div>
+                        <hr />
+                        <div style="align-items: center;display: flex;justify-content: center;" class="panel-heading">
+                           <label for="ReqContact"> Feature Results </label>
+                        </div>
+                        <div style="height:270px;overflow-y:scroll">
+                           <table id="featureDataTable" class="table table-condensed">
+                           </table>
+                        </div>
+                     </div>
+					 <div class="tab-pane" id="tab4">
+                     <div class="input-group col-sm-8" style="padding-left:20px; padding-top:20px">
+                        <span class="input-group-addon">Enter text </span>
+                        <input id="textForSentiment" class="form-control">
+                        <span class="input-group-btn">
+                        <button id="getSentiment" class="btn btn-info">Get Sentiment</button>
+                        </span>
+                     </div>
+					 <div id="imgDiv" style="padding-top:30px;padding-left:350px">
+					 
+					 </div>
+					 <div style="padding-top:30px">
+					 </div>
+                  </div>
+                  </div>
+                  
+
+               </div>
+            </div>
+         </div>
+      </div>
+      </div>
+      <script>
+         $(document).ready(function () {
+         $('#rootwizard').bootstrapWizard({ 'tabClass': 'nav nav-tabs' });
+         
+             $("#scrap").click(function () {
+                 var scrapURL = $('#scrapURL').val();
+                 $("#testDataTable").empty();
+                 $.ajax({
+                     url: '/scrap/',
+                     data: { 'scrapURL': scrapURL},
+                     type: 'GET',
+                     success: function (response) {
+                         $.each(response.reviewsScrapped, function(index, value){
+         var value1= value.split('---');	
+         var $tr = $('<tr></tr>');
+         $tr.append('<td>'+ value1[0] +'</td><td>'+ value1[1] +'</td>')								
+         $('#testDataTable').append($tr);
+         
+         });
+         $("#scrappedLabel").text(response.reviewsScrapped.length+" reviews scrapped")
+                     },
+                     error: function (error) {
+                         alert("error");
+                     }
+                 });
+             });
+         
+         $("#pick").click(function () {
+                 var reviewsToPick = $('#reviewsToPick').val();
+                 $("#testDataTable").empty();
+                 $.ajax({ 
+                     url: '/pick/',
+                     data: { 'reviewsToPick': reviewsToPick},
+                     type: 'GET',
+                     success: function (response) {
+         $.each(response.testCorpus, function(index, value){
+         var value1= value.split('---');	
+         var $tr = $('<tr></tr>');
+         $tr.append('<td>'+ value1[0] +'</td><td>'+ value1[1] +'</td>')								
+         $('#testDataTable').append($tr);
+         
+         });
+                         
+         $("#pickedReviews").text(response.testCorpus.length+" reviews picked")
+                     },
+                     error: function (error) {
+                         alert("error");
+                     }
+                 });
+             });
+         
+         $("#runSVM").click(function () {
+                 $('#svmResultDataTable').empty();
+                 $.ajax({ 
+                     url: '/svm/',
+                     
+                     type: 'GET',
+                     success: function (response) {
+                         $.each(response.result, function(index, value){
+         var value1= value.split('---');	
+         if(value1[0]=='ROC Curve')
+         {
+         var $tr = $('<tr></tr>');
+         $tr.append('<td colspan="2"><img width="500px" src="'+value1[1]+'"></img> </td>')								
+         $('#svmResultDataTable').append($tr);
+         }
+         else
+         {
+         var $tr = $('<tr></tr>');
+         $tr.append('<td>'+ value1[0] +'</td><td>'+ value1[1] +'</td>')								
+         $('#svmResultDataTable').append($tr);
+         }
+         
+         });
+         
+                     },
+                     error: function (error) {
+                         alert("error");
+                     }
+                 });
+             });
+         
+         
+         $("#runNB").click(function () {
+                 $('#nbResultDataTable').empty();
+                 $.ajax({ 
+                     url: '/nb/',
+                     
+                     type: 'GET',
+                     success: function (response) {
+                         $.each(response.result, function(index, value){
+         var value1= value.split('---');	
+         if(value1[0]=='ROC Curve')
+         {
+         var $tr = $('<tr></tr>');
+         $tr.append('<td colspan="2"><img width="500px" src="'+value1[1]+'"></img> </td>')								
+         $('#nbResultDataTable').append($tr);
+         }
+         else
+         {
+         var $tr = $('<tr></tr>');
+         $tr.append('<td>'+ value1[0] +'</td><td>'+ value1[1] +'</td>')								
+         $('#nbResultDataTable').append($tr);
+         }
+         
+         });
+         
+                     },
+                     error: function (error) {
+                         alert("error");
+                     }
+                 });
+             });
+         
+         $("#featureScore").click(function () {
+         $('#featureDataTable').empty()
+                 var feature = $('#feature').val();
+                 $.ajax({ 
+                     url: '/featureScore/',
+                     data: { 'feature': feature},
+                     type: 'GET',
+                     success: function (response) {
+                         $.each(response.featureResult, function(index, value){
+         var value1= value.split('---');	
+         var $tr = $('<tr></tr>');
+         $tr.append('<td>'+ value1[0] +'</td><td>'+ value1[1] +'</td>')								
+         $('#featureDataTable').append($tr);
+         });
+         
+                     },
+                     error: function (error) {
+                         alert("error");
+                     }
+                 });
+             });
+			 
+			 
+		$("#getSentiment").click(function () {
+				$("#imgDiv").html("")
+                 var textForSentiment = $('#textForSentiment').val();
+                 $.ajax({ 
+                     url: '/getSentiment/',
+                     data: { 'text': textForSentiment},
+                     type: 'GET',
+                     success: function (response) {
+					 
+						fileName = response.sentimentResult[1].split('---')[1];
+						$("#imgDiv").append('<img width="350px" height="300px" src="'+fileName+'"></img>');
+						
+         
+                     },
+                     error: function (error) {
+                         alert("error");
+                     }
+             });
+         
+         });
+         
+         });
+      </script>
+   </body>
+</html>
